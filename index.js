@@ -40,9 +40,9 @@ async function displayDeals(deals) {
         const nameCell = row.insertCell();
         nameCell.textContent = deal.name;
 
-        const budgetCell = row.insertCell();
-        budgetCell.textContent = deal.budget;
-
+        const priceCell = row.insertCell();
+        priceCell.textContent = deal.price;
+        
         const createdCell = row.insertCell();
         createdCell.textContent = new Date(deal.created_at * 1000).toLocaleString();
 
@@ -66,8 +66,8 @@ function updateDeals(page, limit) {
     getDeals(page, limit).then(displayDeals);
 }
 
-function sortDealsByBudget(deals) {
-    return deals.sort((a, b) => a.budget - b.budget);
+function sortDealsByPrice(deals) {
+    return deals.sort((a, b) => a.price - b.price);
 }
 
 function sortDealsByName(deals) {
