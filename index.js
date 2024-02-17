@@ -2,6 +2,8 @@ const accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJlMzM1YWJiNmE
 
 const apiUrl = 'https://rusivary.amocrm.ru/api/v4/leads';
 
+const usersApiUrl = 'https://rusivary.amocrm.ru/api/v4/users';
+
 const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
 async function getDeals(page, limit) {
@@ -15,7 +17,19 @@ async function getDeals(page, limit) {
     return data._embedded.leads;
 }
 
-function displayDeals(deals) {
+async function getUsers() {
+    const response = await fetch(proxyUrl + usersApiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+    const data = await response.json();
+    return data._embedded.users;
+}
+
+async function displayDeals(deals) {
+    const users = await getUsers();
     const table = document.getElementById('deals-table');
     const tbody = table.getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
@@ -27,7 +41,7 @@ function displayDeals(deals) {
         nameCell.textContent = deal.name;
 
         const budgetCell = row.insertCell();
-        budgetCell.textContent = deal.price;
+        budgetCell.textContent = deal.budget;
 
         const createdCell = row.insertCell();
         createdCell.textContent = new Date(deal.created_at * 1000).toLocaleString();
@@ -36,7 +50,8 @@ function displayDeals(deals) {
         updatedCell.textContent = new Date(deal.updated_at * 1000).toLocaleString();
 
         const responsibleCell = row.insertCell();
-        responsibleCell.textContent = deal.responsible_user_id;
+        const responsibleUser = users.find(user => user.id === deal.responsible_user_id);
+        responsibleCell.textContent = responsibleUser ? responsibleUser.name : 'Неизвестно';
     });
 }
 
