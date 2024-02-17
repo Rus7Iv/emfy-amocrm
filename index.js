@@ -4,7 +4,8 @@ const apiUrl = 'https://rusivary.amocrm.ru/api/v4/leads';
 
 const usersApiUrl = 'https://rusivary.amocrm.ru/api/v4/users';
 
-const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+// const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+const proxyUrl = 'https://corsproxy.io/?';
 
 async function getDeals(page, limit) {
     const response = await fetch(proxyUrl + `${apiUrl}?page=${page}&limit=${limit}`, {
