@@ -32,7 +32,7 @@ async function getDeals(page, limit) {
     return data._embedded.leads;
 }
 
-async function getAllDeals(page = 1, limit = 50) {
+async function getAllDeals(page = 1, limit = 5) {
     const response = await fetch(proxyUrl + `${apiUrl}?page=${page}&limit=${limit}`, {
         method: 'GET',
         headers: {
@@ -42,6 +42,7 @@ async function getAllDeals(page = 1, limit = 50) {
     const data = await response.json();
     allDeals = allDeals.concat(data._embedded.leads);
     if (data._embedded.leads.length === limit) {
+        await delay(500);
         await getAllDeals(page + 1, limit);
     }
 }
