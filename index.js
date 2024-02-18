@@ -7,6 +7,11 @@ const usersApiUrl = 'https://rusivary.amocrm.ru/api/v4/users';
 // const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const proxyUrl = 'https://corsproxy.io/?';
 
+let sortState = {
+    'Название сделки': 0,
+    'Бюджет': 0
+};
+
 function delay(t, v) {
    return new Promise(function(resolve) { 
        setTimeout(resolve.bind(null, v), t)
@@ -88,6 +93,22 @@ document.querySelectorAll('#deals-per-page button').forEach(button => {
         localStorage.setItem('dealsPerPage', this.value);
         updateDeals(1, limit);
     });
+});
+
+document.getElementById('deals-table').addEventListener('click', function(event) {
+    if (event.target.tagName === 'TH') {
+        const column = event.target.textContent;
+        if (column === 'Название сделки' || column === 'Бюджет') {
+            sortState[column] = (sortState[column] + 1) % 3;
+            if (sortState[column] === 1) {
+                getDeals(1, limit).then(deals => displayDeals(column === 'Название сделки' ? sortDealsByName(deals) : sortDealsByPrice(deals)));
+            } else if (sortState[column] === 2) {
+                getDeals(1, limit).then(deals => displayDeals((column === 'Название сделки' ? sortDealsByName(deals) : sortDealsByPrice(deals)).reverse()));
+            } else {
+                updateDeals(1, limit);
+            }
+        }
+    }
 });
 
 const savedLimit = localStorage.getItem('dealsPerPage');
