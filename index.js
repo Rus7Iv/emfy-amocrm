@@ -13,6 +13,7 @@ let sortState = {
 };
 
 let allDeals = [];
+let originalOrder = [];
 
 function delay(t, v) {
    return new Promise(function(resolve) { 
@@ -41,6 +42,7 @@ async function getAllDeals(page = 1, limit = 5) {
     });
     const data = await response.json();
     allDeals = allDeals.concat(data._embedded.leads);
+    originalOrder = [...allDeals];
     if (data._embedded.leads.length === limit) {
         await delay(500);
         await getAllDeals(page + 1, limit);
@@ -134,6 +136,8 @@ document.getElementById('deals-table').addEventListener('click', function(event)
                 allDeals = column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals);
             } else if (sortState[column] === 2) {
                 allDeals = (column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals)).reverse();
+            } else {
+                allDeals = [...originalOrder];
             }
             const savedLimit = localStorage.getItem('dealsPerPage');
             const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
@@ -141,7 +145,6 @@ document.getElementById('deals-table').addEventListener('click', function(event)
         }
     }
 });
-
 
 const savedLimit = localStorage.getItem('dealsPerPage');
 const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
