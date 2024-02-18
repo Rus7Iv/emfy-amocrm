@@ -23,14 +23,17 @@
             <tbody></tbody>
         </table>
         <div class="buttons-container">
-            <div id="deals-per-page">
-                <select id="deals-select">
-                    <option value="2">2</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="all">Все</option>
-                </select>
-            </div>            
+            <div class="select-container">
+                <span class="select-text">Строк на странице:</span>  
+                <div id="deals-per-page">
+                    <select id="deals-select">
+                        <option class="select-items" value="2">2</option>
+                        <option class="select-items" value="5">5</option>
+                        <option class="select-items" value="10">10</option>
+                        <option class="select-items" value="all">Все</option>
+                    </select>
+                </div>
+            </div>                       
             <div id="pagination"></div>
         </div>
     </div>
