@@ -70,13 +70,24 @@ async function displayDeals(deals) {
 
 function displayPagination(totalDeals, limit) {
     const totalPages = Math.ceil(totalDeals / limit);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
     for (let i = 1; i <= totalPages; i++) {
-        // пагинация 
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.addEventListener('click', function() {
+            updateDeals(i, limit);
+        });
+        pagination.appendChild(button);
     }
 }
 
-function updateDeals(page, limit) {
-    getDeals(page, limit).then(displayDeals);
+async function updateDeals(page, limit) {
+    const deals = await getDeals(page, limit);
+    const totalDeals = await getDeals(1, Infinity);
+    displayDeals(deals);
+    displayPagination(totalDeals.length, limit);
 }
 
 function sortDealsByPrice(deals) {
