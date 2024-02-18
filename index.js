@@ -78,8 +78,10 @@ function sortDealsByName(deals) {
 document.querySelectorAll('#deals-per-page button').forEach(button => {
     button.addEventListener('click', function() {
         const limit = parseInt(this.value);
+        localStorage.setItem('dealsPerPage', limit);
         updateDeals(1, limit);
     });
 });
 
-updateDeals(1, 5);
+const savedLimit = parseInt(localStorage.getItem('dealsPerPage')) || 5;
+updateDeals(1, savedLimit);
