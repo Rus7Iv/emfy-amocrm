@@ -120,12 +120,10 @@ function sortDealsByName(deals) {
     return deals.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-document.querySelectorAll('#deals-per-page button').forEach(button => {
-    button.addEventListener('click', function() {
-        const limit = this.value === 'all' ? Infinity : parseInt(this.value);
-        localStorage.setItem('dealsPerPage', this.value);
-        updateDeals(1, limit);
-    });
+document.getElementById('deals-select').addEventListener('change', function() {
+    const limit = this.value === 'all' ? Infinity : parseInt(this.value);
+    localStorage.setItem('dealsPerPage', this.value);
+    updateDeals(1, limit);
 });
 
 document.getElementById('deals-table').addEventListener('click', function(event) {
@@ -158,7 +156,7 @@ document.getElementById('deals-table').addEventListener('click', function(event)
     }
 });
 
-
 const savedLimit = localStorage.getItem('dealsPerPage');
 const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
+document.getElementById('deals-select').value = savedLimit;
 updateDeals(1, limit);
