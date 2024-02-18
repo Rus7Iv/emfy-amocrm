@@ -12,6 +12,8 @@ let sortState = {
     'Бюджет': 0
 };
 
+let allDeals = [];
+
 function delay(t, v) {
    return new Promise(function(resolve) { 
        setTimeout(resolve.bind(null, v), t)
@@ -28,6 +30,20 @@ async function getDeals(page, limit) {
     });
     const data = await response.json();
     return data._embedded.leads;
+}
+
+async function getAllDeals(page = 1, limit = 50) {
+    const response = await fetch(proxyUrl + `${apiUrl}?page=${page}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+    const data = await response.json();
+    allDeals = allDeals.concat(data._embedded.leads);
+    if (data._embedded.leads.length === limit) {
+        await getAllDeals(page + 1, limit);
+    }
 }
 
 async function getUsers() {
@@ -84,10 +100,12 @@ function displayPagination(totalDeals, limit) {
 }
 
 async function updateDeals(page, limit) {
-    const deals = await getDeals(page, limit);
-    const totalDeals = await getDeals(1, Infinity);
+    if (!allDeals.length) {
+        await getAllDeals();
+    }
+    const deals = allDeals.slice((page - 1) * limit, page * limit);
     displayDeals(deals);
-    displayPagination(totalDeals.length, limit);
+    displayPagination(allDeals.length, limit);
 }
 
 function sortDealsByPrice(deals) {
@@ -112,15 +130,17 @@ document.getElementById('deals-table').addEventListener('click', function(event)
         if (column === 'Название сделки' || column === 'Бюджет') {
             sortState[column] = (sortState[column] + 1) % 3;
             if (sortState[column] === 1) {
-                getDeals(1, limit).then(deals => displayDeals(column === 'Название сделки' ? sortDealsByName(deals) : sortDealsByPrice(deals)));
+                allDeals = column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals);
             } else if (sortState[column] === 2) {
-                getDeals(1, limit).then(deals => displayDeals((column === 'Название сделки' ? sortDealsByName(deals) : sortDealsByPrice(deals)).reverse()));
-            } else {
-                updateDeals(1, limit);
+                allDeals = (column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals)).reverse();
             }
+            const savedLimit = localStorage.getItem('dealsPerPage');
+            const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
+            updateDeals(1, limit);
         }
     }
 });
+
 
 const savedLimit = localStorage.getItem('dealsPerPage');
 const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
