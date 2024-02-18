@@ -129,15 +129,26 @@ document.querySelectorAll('#deals-per-page button').forEach(button => {
 
 document.getElementById('deals-table').addEventListener('click', function(event) {
     if (event.target.tagName === 'TH') {
-        const column = event.target.textContent;
+        let column = event.target.textContent;
+        column = column.replace(' ▲', '').replace(' ▼', '');
         if (column === 'Название сделки' || column === 'Бюджет') {
+            for (let key in sortState) {
+                if (key !== column) {
+                    sortState[key] = 0;
+                    let otherHeader = Array.from(document.querySelectorAll('#deals-table th')).find(th => th.textContent.includes(key));
+                    otherHeader.textContent = key;
+                }
+            }
             sortState[column] = (sortState[column] + 1) % 3;
             if (sortState[column] === 1) {
                 allDeals = column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals);
+                event.target.innerHTML = column + ' ▼';
             } else if (sortState[column] === 2) {
                 allDeals = (column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals)).reverse();
+                event.target.innerHTML = column + ' ▲';
             } else {
                 allDeals = [...originalOrder];
+                event.target.textContent = column;
             }
             const savedLimit = localStorage.getItem('dealsPerPage');
             const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
@@ -145,6 +156,7 @@ document.getElementById('deals-table').addEventListener('click', function(event)
         }
     }
 });
+
 
 const savedLimit = localStorage.getItem('dealsPerPage');
 const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
