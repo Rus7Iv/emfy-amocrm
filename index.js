@@ -7,7 +7,14 @@ const usersApiUrl = 'https://rusivary.amocrm.ru/api/v4/users';
 // const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const proxyUrl = 'https://corsproxy.io/?';
 
+function delay(t, v) {
+   return new Promise(function(resolve) { 
+       setTimeout(resolve.bind(null, v), t)
+   });
+}
+
 async function getDeals(page, limit) {
+    await delay(500);
     const response = await fetch(proxyUrl + `${apiUrl}?page=${page}&limit=${limit}`, {
         method: 'GET',
         headers: {
