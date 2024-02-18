@@ -2,41 +2,36 @@
 <html>
 <head>
     <title>amoCRM Deals</title>
-    <style>
-        #deals-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-    
-        #deals-table th, #deals-table td {
-            border: 2px solid lightgray;
-            padding: 8px;
-            text-align: left;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Сделки amoCRM</h1>
-    <div id="deals-per-page">
-        <button value="2">2</button>
-        <button value="5">5</button>
-        <button value="10">10</button>
-        <button value="all">Все</button>
+    <h1 class="title">Сделки amoCRM</h1>
+    <div class="table-container">
+        <table id="deals-table">
+            <thead>
+                <tr>
+                    <th>Название сделки</th>
+                    <th>Бюджет</th>
+                    <th>Дата создания</th>
+                    <th>Дата изменения</th>
+                    <th>Ответственный</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="buttons-container">
+            <div id="deals-per-page">
+                <button value="2">2</button>
+                <button value="5">5</button>
+                <button value="10">10</button>
+                <button value="all">Все</button>
+            </div>
+            <div id="pagination"></div>
+        </div>
     </div>
-    <table id="deals-table">
-        <thead>
-            <tr>
-                <th>Название сделки</th>
-                <th>Бюджет</th>
-                <th>Дата создания</th>
-                <th>Дата изменения</th>
-                <th>Ответственный</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <div id="pagination"></div>
     <script src="index.js"></script>
 </body>
 </html>

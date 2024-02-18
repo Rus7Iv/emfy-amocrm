@@ -95,6 +95,7 @@ function displayPagination(totalDeals, limit) {
     for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement('button');
         button.textContent = i;
+        button.className = 'pagination-button';
         button.addEventListener('click', function() {
             updateDeals(i, limit);
         });
