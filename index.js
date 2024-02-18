@@ -75,7 +75,11 @@ function sortDealsByName(deals) {
     return deals.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-getDeals(1, 5).then(deals => {
-    displayDeals(deals);
-    displayPagination(deals.length, 5);
+document.querySelectorAll('#deals-per-page button').forEach(button => {
+    button.addEventListener('click', function() {
+        const limit = parseInt(this.value);
+        updateDeals(1, limit);
+    });
 });
+
+updateDeals(1, 5);
