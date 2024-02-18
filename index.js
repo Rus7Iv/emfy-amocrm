@@ -77,11 +77,12 @@ function sortDealsByName(deals) {
 
 document.querySelectorAll('#deals-per-page button').forEach(button => {
     button.addEventListener('click', function() {
-        const limit = parseInt(this.value);
-        localStorage.setItem('dealsPerPage', limit);
+        const limit = this.value === 'all' ? Infinity : parseInt(this.value);
+        localStorage.setItem('dealsPerPage', this.value);
         updateDeals(1, limit);
     });
 });
 
-const savedLimit = parseInt(localStorage.getItem('dealsPerPage')) || 5;
-updateDeals(1, savedLimit);
+const savedLimit = localStorage.getItem('dealsPerPage');
+const limit = savedLimit === 'all' ? Infinity : parseInt(savedLimit) || 5;
+updateDeals(1, limit);
