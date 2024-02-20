@@ -1,4 +1,4 @@
-import { updateDeals } from './src/components/Deals.js';
+import { updateDeals } from './src/api/getDeals.js';
 
 export let sortState = {
     'Название сделки': 0,

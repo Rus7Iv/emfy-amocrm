@@ -1,37 +1,7 @@
-import { delay } from "../utils/index.js";
 import { getUsers } from '../../src/api/getUsers.js';
-import { accessToken, proxyUrl, apiUrl } from "../../config.js";
-import { displayPagination } from '../components/Pagination.js';
 import { sortState } from "../../index.js";
 import { sortDealsByName, sortDealsByPrice } from "../utils/index.js";
-
-let allDeals = [];
-let originalOrder = [];
-
-export async function getAllDeals(page = 1, limit = 5) {
-    const response = await fetch(proxyUrl + `${apiUrl}?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    });
-    const data = await response.json();
-    allDeals = allDeals.concat(data._embedded.leads);
-    originalOrder = [...allDeals];
-    if (data._embedded.leads.length === limit) {
-        await delay(500);
-        await getAllDeals(page + 1, limit);
-    }
-}
-
-export async function updateDeals(page, limit) {
-    if (!allDeals.length) {
-        await getAllDeals();
-    }
-    const deals = allDeals.slice((page - 1) * limit, page * limit);
-    displayDeals(deals);
-    displayPagination(allDeals.length, limit);
-}
+import { updateDeals, dealsData } from '../api/getDeals.js';
 
 export async function displayDeals(deals) {
     const users = await getUsers();
@@ -74,13 +44,13 @@ document.getElementById('deals-table').addEventListener('click', function(event)
             }
             sortState[column] = (sortState[column] + 1) % 3;
             if (sortState[column] === 1) {
-                allDeals = column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals);
+                dealsData.allDeals = column === 'Название сделки' ? sortDealsByName(dealsData.allDeals) : sortDealsByPrice(dealsData.allDeals);
                 event.target.innerHTML = column + ' ▼';
             } else if (sortState[column] === 2) {
-                allDeals = (column === 'Название сделки' ? sortDealsByName(allDeals) : sortDealsByPrice(allDeals)).reverse();
+                dealsData.allDeals = (column === 'Название сделки' ? sortDealsByName(dealsData.allDeals) : sortDealsByPrice(dealsData.allDeals)).reverse();
                 event.target.innerHTML = column + ' ▲';
             } else {
-                allDeals = [...originalOrder];
+                dealsData.allDeals = [...dealsData.originalOrder];
                 event.target.textContent = column;
             }
             const savedLimit = localStorage.getItem('dealsPerPage');

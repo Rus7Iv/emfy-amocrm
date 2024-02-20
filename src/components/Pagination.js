@@ -1,4 +1,4 @@
-import { updateDeals } from "./Deals.js";
+import { updateDeals } from "../api/getDeals.js";
 
 export function displayPagination(totalDeals, limit) {
     const totalPages = Math.ceil(totalDeals / limit);

@@ -4,6 +4,4 @@ export const apiUrl = 'https://rusivary.amocrm.ru/api/v4/leads';
 
 export const usersApiUrl = 'https://rusivary.amocrm.ru/api/v4/users';
 
-// const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-// const proxyUrl = 'https://corsproxy.io/?';
 export const proxyUrl = 'https://corsproxy.org/?';
