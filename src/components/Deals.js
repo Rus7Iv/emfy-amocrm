@@ -59,3 +59,10 @@ document.getElementById('deals-table').addEventListener('click', function(event)
         }
     }
 });
+
+const loadingWheel = document.createElement('div');
+loadingWheel.id = 'loading-wheel';
+loadingWheel.style.display = 'none';
+
+const buttonsContainer = document.querySelector('.buttons-container');
+buttonsContainer.appendChild(loadingWheel);

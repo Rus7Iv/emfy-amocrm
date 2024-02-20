@@ -65,6 +65,7 @@ body {
 .buttons-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .table-container {
@@ -104,4 +105,20 @@ body .pagination-button:hover {
 
 .select-items {
     background-color: var(--mdc-theme-secondary);
+}
+
+#loading-wheel {
+    width: 32px;
+    height: 32px;
+    border: 5px solid #F7FFED;
+    filter: brightness(90%);
+    border-top: 5px solid var(--mdc-theme-primary);
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+    margin: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
